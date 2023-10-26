@@ -1,7 +1,7 @@
 import multiprocessing
 
 # bind to 0.0.0.0:8000 for external access
-bind = "0.0.0.0:5000"
+bind = "0.0.0.0:5002"
 
 # number of worker processes to spawn
 workers = multiprocessing.cpu_count() //2 

@@ -4,7 +4,8 @@ from flask import Flask, request, jsonify,render_template,Response
 #import cv2
 from PIL import Image, ImageDraw
 # Configurez l'emplacement du programme Tesseract OCR (il peut être nécessaire de le modifier en fonction de votre installation)
-pytesseract.pytesseract.tesseract_cmd ='/usr/bin/tesseract'
+#pytesseract.pytesseract.tesseract_cmd ='/usr/bin/tesseract'
+pytesseract.pytesseract.tesseract_cmd = '/usr/local/bin/tesseract'
 
 app = Flask(__name__)
 
@@ -25,7 +26,7 @@ def index():
 
 # Définissez l'URL pour le traitement de l'OCR
 @app.route('/process_image', methods=['POST'])
-def process_image():
+def hall_of_fame_process():
     try:
 
         if 'image' not in request.files:
@@ -49,6 +50,41 @@ def process_image():
         response.headers.add('Access-Control-Allow-Origin', '*')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
         response.headers.add('Access-Control-Allow-Methods', 'POST')
+        return response
+
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+# Définissez l'URL pour le traitement de l'OCR
+@app.route('/process_image_troops', methods=['POST'])
+def troops_process():
+    try:
+
+        if 'image' not in request.files:
+            return jsonify({'error': "Upload is down"}), 400
+
+        # Récupérez le fichier image depuis le formulaire
+        image = request.files['image']
+        img = Image.open(image)
+       
+        # Redimensionnez l'image
+        width = 1600
+        height = 900
+        img = img.resize((width, height))
+        
+        # Appliquez l'OCR à l'image redimensionnée
+        texte_ocr = troops(img)
+        print(texte_ocr)
+
+        # Retournez les résultats au format JSON
+        response = jsonify({'data': texte_ocr})
+        print(jsonify({'data': texte_ocr}))
+        allowed_origins='http://192.168.1.17:8080'
+        response.headers.add('Access-Control-Allow-Origin', allowed_origins)
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST , OPTIONS')
+        print(response)
         return response
 
 
@@ -209,3 +245,36 @@ def ocr(image):
         return text
     except :
         pass
+
+
+
+def troops(img_):
+    try:
+        text=list()
+
+        x0=490
+        y0=410
+        space_x=222
+        space_y=130
+        roi=(x0,410,110,50) #T5 inf 
+        text.append(img_to_string(recup_roi(img_,roi)))
+        roi=(x0+222,410,110,50)#T5 cav
+        text.append(img_to_string(recup_roi(img_,roi)))
+        roi=(x0+222*2,410,110,50)#T5 arch
+        text.append(img_to_string(recup_roi(img_,roi)))
+        roi=(x0+222*3,410,110,50)#T5 sieges
+        text.append(img_to_string(recup_roi(img_,roi)))
+        
+        roi=(x0,410+130,110,50) #T4 inf 
+        text.append(img_to_string(recup_roi(img_,roi)))
+        roi=(x0+222,410+130,110,50)#T4 cav
+        text.append(img_to_string(recup_roi(img_,roi)))
+        roi=(x0+222*2,410+130,110,50)#T4 arch
+        text.append(img_to_string(recup_roi(img_,roi)))
+        roi=(x0+222*3,410+130,110,50)#T4 sieges
+        text.append(img_to_string(recup_roi(img_,roi)))
+
+        return text
+       # return Img.show()
+    except Exception as e:
+        print(e)

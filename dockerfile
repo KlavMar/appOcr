@@ -21,8 +21,8 @@ RUN apt-get update && apt-get install -y \
     && python3 -m pip install -r requirements.txt \
     && pip3 install virtualenv
 
-COPY . .
-
+#COPY . .
+COPY ./ .var/www
 EXPOSE 5000
 
 CMD gunicorn wsgi:app -c gunicorn_config.py

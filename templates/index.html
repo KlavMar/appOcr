@@ -6,7 +6,13 @@
 </head>
 <body>
     <h1>OCR App</h1>
+    <h4> hall of fame</h4>
     <form action="/process_image" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" accept=".jpg, .jpeg, .png">
+        <input type="submit" value="Soumettre">
+    </form>
+<h4>Troops</h4>
+    <form action="/process_image_troops" method="POST" enctype="multipart/form-data">
         <input type="file" name="image" accept=".jpg, .jpeg, .png">
         <input type="submit" value="Soumettre">
     </form>
