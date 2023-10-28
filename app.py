@@ -75,16 +75,16 @@ def troops_process():
         
         # Appliquez l'OCR à l'image redimensionnée
         texte_ocr = troops(img)
-        print(texte_ocr)
+  
 
         # Retournez les résultats au format JSON
         response = jsonify({'data': texte_ocr})
-        print(jsonify({'data': texte_ocr}))
+        
         allowed_origins='http://192.168.1.17:8080'
         response.headers.add('Access-Control-Allow-Origin', allowed_origins)
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
         response.headers.add('Access-Control-Allow-Methods', 'POST , OPTIONS')
-        print(response)
+
         return response
 
 
