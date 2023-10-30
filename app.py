@@ -4,8 +4,8 @@ from flask import Flask, request, jsonify,render_template,Response
 #import cv2
 from PIL import Image, ImageDraw
 # Configurez l'emplacement du programme Tesseract OCR (il peut être nécessaire de le modifier en fonction de votre installation)
-#pytesseract.pytesseract.tesseract_cmd ='/usr/bin/tesseract'
-pytesseract.pytesseract.tesseract_cmd = '/usr/local/bin/tesseract'
+pytesseract.pytesseract.tesseract_cmd ='/usr/bin/tesseract'
+#pytesseract.pytesseract.tesseract_cmd = '/usr/local/bin/tesseract'
 
 app = Flask(__name__)
 
@@ -47,7 +47,8 @@ def hall_of_fame_process():
 
         # Retournez les résultats au format JSON
         response = jsonify({'data': texte_ocr})
-        response.headers.add('Access-Control-Allow-Origin', '*')
+        allowed_origins='https://s1165.riseofstat.com'
+        response.headers.add('Access-Control-Allow-Origin', allowed_origins)
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
         response.headers.add('Access-Control-Allow-Methods', 'POST')
         return response
@@ -80,7 +81,7 @@ def troops_process():
         # Retournez les résultats au format JSON
         response = jsonify({'data': texte_ocr})
         
-        allowed_origins='http://192.168.1.17:8080'
+        allowed_origins='https://s1165.riseofstat.com'
         response.headers.add('Access-Control-Allow-Origin', allowed_origins)
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
         response.headers.add('Access-Control-Allow-Methods', 'POST , OPTIONS')
